@@ -1,0 +1,120 @@
+<html lang="en">
+  <head>
+    <title> Test </title>
+    <script type="text/javascript" src="jquery.js"></script> 
+    <script type="text/javascript" src="data_generator.js"></script>
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body>
+    <script type="text/javascript">
+
+      $(document).ready(function() {
+
+                          // ****** GLOBAL FLAGS AND COUNTERS ***** // 
+
+        // global variable that remembers what "Main section" is supposed to be at the moment
+        var main_info_space = "all twits";
+
+        // find out how many twits we have logged, how many are in stream...
+        var twits_logged;
+        var twits_in_stream;      
+
+
+                          // ****** DYNAMICALLY GENERATE USER SIDEBAR ****** //
+        
+        // iterate through users
+        for (var i = 0; i < users.length; i++) {           
+          $("#user_sidebar").append(" <button class='user_hist' data-user=" + users[i] + ">" + users[i] + "</button> <br>");
+        };
+
+                          // ****** USEFUL FUNCTIONS ****** //
+
+        // function for helping recalculate global counters
+        function counting() {  
+          twits_logged = $(".single_twit").length;
+          twits_in_stream = streams.home.length;      
+        };
+
+        // function for adding tweets
+        function add_twit(twit) {
+          // get data of latest twit        
+          var latest_user = twit.user; 
+          var latest_msg = twit.message;
+          var latest_time = twit.created_at;
+      
+          // puts a new twit to the top of the list of previous twits 
+          $("#first_twit").after(" <div class='single_twit'>" + 
+                    "<p class='first_line' id='user_name'>" + latest_user + "</p>" +                      
+                    "<p class='first_line' id='timestamp'>" + latest_time + "</p>" +
+                    "<p class='second_line' id='twit_msg'>" + latest_msg + "</p>" +
+                    "</div>"  
+          )
+        };    
+
+                          // ****** BUTTONS AND THEIR ACTIONS ****** //
+
+        // USER HISTORY
+        $(".user_hist").on('click', function() {          
+          // alter global counters + flags           
+          main_info_space = "user history";
+
+          // current user, save syntax
+          var current_user = $(this).data('user');        
+          
+          // clear the main area
+          $("#main_twits_column").html("<div id='first_twit'>");
+
+          // generate tweets from that users history         
+          for (var i = 0; i < streams.users[current_user].length; i++) {
+            add_twit(streams.users[current_user][i]);
+            };
+          });
+            
+        // REFRESH ALL TWITS
+        $(".update_all").on('click', function () {           
+          // control flow - we do something different based on what is current state of main twit column
+          // if it is all tweets, we just add more tweets,
+          // otherwise, we clear the data and start over;    
+          if (main_info_space == "user history") {
+            // clear and reset flags
+            $("#main_twits_column").html("<div id='first_twit'>");          
+            main_info_space = "all twits"
+          };
+
+          // recalculate global counters and flags
+          counting();  
+
+          // iterate through all the new twits we have not logged yet
+          for (var i = twits_logged; i < twits_in_stream; i++) {
+            add_twit(streams.home[i]);
+          };      
+        });                                                
+       
+
+      // function to bring up user history
+
+  });
+
+    </script>
+
+    <center>
+      <h1> Play Space </h1>
+    </center>
+    
+    <section id="main_info_space">        
+        <h3> All Twits </h3>        
+        <h3> Users </h3>
+
+        <button class="update_all"> Refresh All Twits </button>          
+
+        <section id="main_twits_column">                
+          <div id="first_twit">
+        </section>
+
+        <div id="user_sidebar">
+
+        </div>
+    </section>
+  </body>
+</html>

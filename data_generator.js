@@ -52,6 +52,7 @@ for(var i = 0; i < 10; i++){
 
 var scheduleNextTweet = function(){
   generateRandomTweet();
+  // put "update" into here...
   setTimeout(scheduleNextTweet, Math.random() * 1500);
 };
 scheduleNextTweet();
