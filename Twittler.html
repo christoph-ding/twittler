@@ -1,9 +1,10 @@
 <html lang="en">
   <head>
-    <title> Test </title>
+    <title> Hermes </title>
     <script type="text/javascript" src="jquery.js"></script> 
     <script type="text/javascript" src="data_generator.js"></script>
     <link rel="stylesheet" href="style.css">
+    <link href='https://fonts.googleapis.com/css?family=Josefin+Sans' rel='stylesheet' type='text/css'>
   </head>
 
   <body>
@@ -41,7 +42,7 @@
           // get data of latest twit        
           var latest_user = twit.user; 
           var latest_msg = twit.message;
-          var latest_time = twit.created_at;
+          var latest_time = twit.created_at.toString().split(" GMT")[0];
       
           // puts a new twit to the top of the list of previous twits 
           $("#first_twit").after(" <div class='single_twit'>" + 
@@ -70,9 +71,9 @@
             add_twit(streams.users[current_user][i]);
             };
           });
-            
+                  
         // REFRESH ALL TWITS
-        $(".update_all").on('click', function () {           
+        $("#update_all").on('click', function () {           
           // control flow - we do something different based on what is current state of main twit column
           // if it is all tweets, we just add more tweets,
           // otherwise, we clear the data and start over;    
@@ -97,24 +98,21 @@
   });
 
     </script>
+  
+    <img id="logo" src="poke_logo.png" alt="poke" />
 
-    <center>
-      <h1> Play Space </h1>
-    </center>
-    
-    <section id="main_info_space">        
-        <h3> All Twits </h3>        
-        <h3> Users </h3>
-
-        <button class="update_all"> Refresh All Twits </button>          
+    <h1 id="hermes_title"> Hermes </h1>    
+    <section id="main_info_space">                      
 
         <section id="main_twits_column">                
           <div id="first_twit">
         </section>
 
-        <div id="user_sidebar">
-
+        <div id="user_sidebar">          
+          <h2 id="side_bar_title"> Show Messages</h2>
+          <button id="update_all"> All Users </button> <br>
         </div>
+
     </section>
   </body>
 </html>
